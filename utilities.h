@@ -19,7 +19,8 @@ int recordVideo(
     cv::VideoCapture videoCapture,
     int recordinterval = UTILITIES_DEFAULT_RECORDER_INTERVAL,
     std::string filename = UTILITIES_DEFAULT_RECORDER_FILENAME,
-    CODEC codec=CODEC::XVID);
+    CODEC codec = CODEC::XVID,
+    bool timestamp = true);
 
 }
 

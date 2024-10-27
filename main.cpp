@@ -28,16 +28,17 @@ int main()
         clock_t mainTimer = clock();
         clock_t videoTimer = mainTimer;
         int videoDuration = 10; // 10 сек - длительность одного ролика
+        int recordDuration = 60; // 60 сек - длительность всей записи
 
         // Старт первого потока записи
         std::thread counterThread(consoleOutput, videoCounter++);
         counterThread.join();
 
-        std::thread videoThread(mrcv::recordVideo, videoCapture, videoDuration, "chersonesos", CODEC::XVID);
+        std::thread videoThread(mrcv::recordVideo, videoCapture, videoDuration, "chersonesos", CODEC::XVID, true);
         videoThread.join();
 
-        // Пишем в течении 1 минуты
-        while((clock() - mainTimer) <= (60 * CLOCKS_PER_SEC))
+        // Основной цикл записи
+        while((clock() - mainTimer) <= (recordDuration * CLOCKS_PER_SEC))
         {
             if ((clock() - videoTimer) >= videoDuration * CLOCKS_PER_SEC)
             {
@@ -47,7 +48,7 @@ int main()
                 std::thread counterThread(consoleOutput, videoCounter++);
                 counterThread.join();
 
-                std::thread videoThread(mrcv::recordVideo, videoCapture, videoDuration, "chersonesos", CODEC::XVID);
+                std::thread videoThread(mrcv::recordVideo, videoCapture, videoDuration, "chersonesos", CODEC::XVID, true);
                 videoThread.join();
             }
         }
